@@ -76,7 +76,7 @@ class BashFileIterator:
         def __eq__(self, other):
             if isinstance(other, BashFileIterator._Delimiter):
                 return other.character == self.character
-            elif isinstance(other, basestring):
+            if isinstance(other, str):
                 return other == self.character
             return False
 
@@ -270,7 +270,7 @@ class BashFileIterator:
             self.pos += 1
 
         assert not self.isInsideGroup(), 'Invalid syntax'
-        raise StopIteration
+
 
     def isEscaped(self):
         return self.pos in self._indices_of_escaped_characters
@@ -436,8 +436,10 @@ if __name__ == "__main__":
                 src = ifile.read()
         else:
             src = sys.stdin.read()
-        print(src)
-        txt_obfuscated = obfuscate(minify(src))
+        #print(src)
+        minified = minify(src)
+        #print(minified)
+        txt_obfuscated = obfuscate(minified)
         sys.stdout.write("${!#}<<<" + txt_obfuscated)
     except Exception as e:
         print(e)
